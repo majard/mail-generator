@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
 import java.util.Scanner;
 
 /**
@@ -39,12 +40,43 @@ public class UffMailGenerator {
             System.out.println("Não encontramos esse número de matrícula.");
         } else if (!student.getUffmail().isEmpty()){
             System.out.format("%s, você já tem um uffmail: %s\n", 
-                                student.getName(), student.getUffmail() );
+                                student.getFirstName(), student.getUffmail() );
         } else if(!student.isActive()){
             System.out.format("%s, sua matrícula não está ativa e portanto "
-                    + "você não pode criar um uffmail.\n", student.getName());
+                    + "você não pode criar um uffmail.\n", student.getFirstName());
         } else{
             System.out.println("BORA CRIAR UM UFFMAIL AGORA\n");
+            ArrayList<String> options = generateOptions(student, studentList);
+            System.out.format("%s, por favor escolha uma das opções abaixo"
+                    + " para o seu UFFMail\n", student.getFirstName());
+            
+            for (int j = 0; j < options.size(); j++) {
+                System.out.format("%d - %s \n", j + 1, options.get(j));
+            }
+            
+            int option = 0;
+            
+            do{
+                if(input.hasNextInt()){
+                    option = input.nextInt();
+                    if (option < 1 || option > options.size()){
+                        option = 0;
+                        System.out.format("Selecione um número entre 1 e "
+                                + "%d.\n", options.size());
+                    }
+                } else {
+                    input.next();
+                    System.out.format("Selecione um número entre 1 e "
+                                + "%d.\n", options.size());
+                }
+            } while(option == 0);
+            
+            --option;
+            
+            System.out.format("A criação de seu email (%s) será feita nos "
+            + "próximos minutos.\nUm SMS foi enviado para %s com a sua senha "
+            + "de acesso.\n", options.get(option), student.getPhoneNumber());
+            
         }
     }
     
@@ -80,4 +112,34 @@ public class UffMailGenerator {
         return studentList;
     }
     
+    public static ArrayList<String> generateOptions(Student student, 
+            List<Student> studentList){
+        
+        String[] names = student.getName().toLowerCase().split(" ");
+        List<String> options = new ArrayList<>();
+        HashSet<String> mailList = createHashSet(studentList);
+        
+        String option;
+                
+        for (int i = 1; i < names.length; i++) {
+            option = names[0] + names[i] + "@id.uff.br";
+            if (!mailList.contains(option)){
+                options.add(option);
+            }
+        }
+        
+        return (ArrayList<String>) options;                
+    }
+    
+    public static HashSet<String> createHashSet(List<Student> studentList){
+        HashSet<String> result = new HashSet<>();
+        String uffmail;
+        for (int i = 0; i < studentList.size(); i++) {
+            uffmail = studentList.get(i).getUffmail();
+            if (!uffmail.isEmpty()) {
+                result.add(uffmail);
+            }            
+        }
+        return result;
+    }
 }

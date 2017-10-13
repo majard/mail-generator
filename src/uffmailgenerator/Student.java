@@ -41,10 +41,24 @@ public class Student {
     public String getName(){
         return this.name;
     }   
-    public void setUffmail(String uffmail){
-        this.uffmail = uffmail;
+    
+    public String getFirstName(){
+        return this.name.split(" ")[0];
+    }
+    
+    public String getPhoneNumber(){
+        return this.phoneNumber;
+    }
+    public Boolean setUffmail(String uffmail){
+        if (this.uffmail.isEmpty()){
+            this.uffmail = uffmail;
+            return true;
+        } else {
+            return false;
+        }
     }   
     
+    @Override
     public String toString(){
         String studentInfo = "";
         studentInfo += "Nome: " + name + "\n";        
