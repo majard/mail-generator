@@ -123,8 +123,36 @@ public class UffMailGenerator {
                 
         for (int i = 1; i < names.length; i++) {
             option = names[0] + names[i] + "@id.uff.br";
+            
             if (!mailList.contains(option)){
                 options.add(option);
+            }
+            
+            option = names[0].substring(0,1) + names[i] + "@id.uff.br";
+            
+            if (!mailList.contains(option)){
+                options.add(option);
+            }
+            
+            for (int j = i + 1; j < names.length; j++) {
+                option = names[0].substring(0,1) + names[i] + names[j] +
+                        "@id.uff.br";
+                
+                if (!mailList.contains(option)){
+                    options.add(option);
+                }
+                option = names[0].substring(0,1) + names[i] + 
+                        names[j].substring(0,1) + "@id.uff.br";
+                
+                if (!mailList.contains(option)){
+                    options.add(option);
+                }
+                option = names[0].substring(0,1) + names[i].substring(0,1) 
+                        + names[j] + "@id.uff.br";
+                
+                if (!mailList.contains(option)){
+                    options.add(option);
+                }                
             }
         }
         
