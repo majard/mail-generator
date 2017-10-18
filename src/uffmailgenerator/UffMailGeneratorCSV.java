@@ -12,79 +12,19 @@ import java.util.Scanner;
  */
 
 
-public class UffMailGenerator {
+public class UffMailGeneratorCSV implements DatabaseManager {
+    List<Student> studentList;
+
     
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-        List<Student> studentList = new ArrayList<>();
-        fillStudentList(studentList, "alunos.csv");        
-        
-        Scanner input = new Scanner(System.in);
-        System.out.println("Digite sua matrícula:");
-        String mat = input.nextLine();
-        Student student = null;
-        
-        int i = 0;
-        while (i < studentList.size()){
-            if(studentList.get(i).getRegistrationNumber().equals(mat)){
-                student = studentList.get(i);
-                break;
-            }
-            ++i;
-        }
-        
-        if (i == studentList.size()){
-            System.out.println("Não encontramos esse número de matrícula.");
-        } else if (!student.getUffmail().isEmpty()){
-            System.out.format("%s, você já tem um uffmail: %s\n", 
-                                student.getFirstName(), student.getUffmail() );
-        } else if(!student.isActive()){
-            System.out.format("%s, sua matrícula não está ativa e portanto "
-                    + "você não pode criar um uffmail.\n", student.getFirstName());
-        } else{
-            System.out.println("BORA CRIAR UM UFFMAIL AGORA\n");
-            ArrayList<String> options = generateOptions(student, studentList);
-            System.out.format("%s, por favor escolha uma das opções abaixo"
-                    + " para o seu UFFMail\n", student.getFirstName());
-            
-            for (int j = 0; j < options.size(); j++) {
-                System.out.format("%d - %s \n", j + 1, options.get(j));
-            }
-            
-            int option = 0;
-            
-            do{
-                if(input.hasNextInt()){
-                    option = input.nextInt();
-                    if (option < 1 || option > options.size()){
-                        option = 0;
-                        System.out.format("Selecione um número entre 1 e "
-                                + "%d.\n", options.size());
-                    }
-                } else {
-                    input.next();
-                    System.out.format("Selecione um número entre 1 e "
-                                + "%d.\n", options.size());
-                }
-            } while(option == 0);
-            
-            --option;
-            
-            System.out.format("A criação de seu email (%s) será feita nos "
-            + "próximos minutos.\nUm SMS foi enviado para %s com a sua senha "
-            + "de acesso.\n", options.get(option), student.getPhoneNumber());
-            
-        }
+    public UffMailGeneratorCSV(){
+        this.studentList = new ArrayList<>();
     }
     
     /*Fills the List studentList with the students contained in the csv file
       named fileName in the root directory
     */
-    public static List<Student> fillStudentList(List<Student> studentList, String fileName){
-        
+    @Override
+    public void fillStudentList(String fileName){
         try(Scanner scanner =  new Scanner(new File(fileName))){
             scanner.nextLine();  //jumps the first line that has the header row
             
@@ -108,12 +48,10 @@ public class UffMailGenerator {
             System.out.println("Não foi possível abrir o arquivo.");
             System.out.println(err.getMessage());
         }
-        
-        return studentList;
     }
     
-    public static ArrayList<String> generateOptions(Student student, 
-            List<Student> studentList){
+    @Override
+    public List<String> generateOptions(Student student){
         
         String[] names = student.getName().toLowerCase().split(" ");
         List<String> options = new ArrayList<>();
@@ -156,10 +94,10 @@ public class UffMailGenerator {
             }
         }
         
-        return (ArrayList<String>) options;                
+        return options;                   
     }
     
-    public static HashSet<String> createHashSet(List<Student> studentList){
+    public HashSet<String> createHashSet(List<Student> studentList){
         HashSet<String> result = new HashSet<>();
         String uffmail;
         for (int i = 0; i < studentList.size(); i++) {
@@ -170,4 +108,24 @@ public class UffMailGenerator {
         }
         return result;
     }
+    
+    public int databaseSize(){
+        return studentList.size();
+    }
+    
+    public Student findStudent(String id){
+        Student student = null;
+        int i = 0;
+        
+        while (i < studentList.size()){
+            if(studentList.get(i).getId().equals(id)){
+                student = studentList.get(i);
+                break;
+            }
+            ++i;
+        }
+        
+        return student;
+    }
+    
 }
