@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package uffmailgenerator;
 
 /**
@@ -11,7 +6,7 @@ package uffmailgenerator;
  */
 public class Student {
     private String name;
-    private String registrationNumber;
+    private String id;
     private String phoneNumber;
     private String email;
     private String uffmail;
@@ -20,7 +15,7 @@ public class Student {
     public Student(String name, String registrationNumber, String phoneNumber,
             String email,String uffmail, Boolean status){
         this.name = name;
-        this.registrationNumber = registrationNumber;
+        this.id = registrationNumber;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.uffmail = uffmail;
@@ -31,8 +26,8 @@ public class Student {
         return this.status;
     }
     
-    public String getRegistrationNumber(){
-        return this.registrationNumber;
+    public String getId(){
+        return this.id;
     }
     
     public String getUffmail(){
@@ -62,7 +57,7 @@ public class Student {
     public String toString(){
         String studentInfo = "";
         studentInfo += "Nome: " + name + "\n";        
-        studentInfo += "Matrícula: " + registrationNumber + "\n";
+        studentInfo += "Matrícula: " + id + "\n";
         studentInfo += "Telefone: " + phoneNumber + "\n";
         studentInfo += "E-mail: " + email + "\n";
         studentInfo += "Uffmail: " + uffmail + "\n";
