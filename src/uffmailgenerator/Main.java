@@ -9,7 +9,7 @@ public class Main {
     
     public static void main(String[] args) {
         
-        DatabaseManager dbManager = new UffMailGeneratorCSV();
+        DatabaseManager dbManager = new DatabaseManagerCSV();
         
         dbManager.fillStudentList("alunos.csv");        
         UserInterface ui = new UserInterface();
