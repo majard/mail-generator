@@ -13,11 +13,13 @@ import java.util.Scanner;
 
 
 public class DatabaseManagerCSV implements DatabaseManager {
-    List<Student> studentList;
+    private List<Student> studentList;
+    private HashSet<String> mailList;
 
     
     public DatabaseManagerCSV(){
         this.studentList = new ArrayList<>();
+        this.mailList = null;
     }
     
     /*Fills the List studentList with the students contained in the csv file
@@ -48,25 +50,30 @@ public class DatabaseManagerCSV implements DatabaseManager {
             System.out.println("Não foi possível abrir o arquivo.");
             System.out.println(err.getMessage());
         }
+        
+        /* Fills the mailList with a HashSet so we're able to search for 
+           e-mail addresses in O(1). Specially useful for the generation
+           of e-mail alternatives, that needs to perform a lot of 
+           searches. */
+        mailList = createHashSet(studentList);          
     }
     
     @Override
     public List<String> generateOptions(Student student){
         
         String[] names = student.getName().toLowerCase().split(" ");
-        List<String> options = new ArrayList<>();
-        HashSet<String> mailList = createHashSet(studentList);
-        
+        List<String> options = new ArrayList<>();        
+        String domain = "@id.uff.br";
         String option;
                 
         for (int i = 1; i < names.length; i++) {
-            option = names[0] + names[i] + "@id.uff.br";
+            option = names[0] + names[i] + domain;
             
             if (!mailList.contains(option)){
                 options.add(option);
             }
             
-            option = names[0].substring(0,1) + names[i] + "@id.uff.br";
+            option = names[0].substring(0,1) + names[i] + domain;
             
             if (!mailList.contains(option)){
                 options.add(option);
@@ -74,19 +81,19 @@ public class DatabaseManagerCSV implements DatabaseManager {
             
             for (int j = i + 1; j < names.length; j++) {
                 option = names[0].substring(0,1) + names[i] + names[j] +
-                        "@id.uff.br";
+                        domain;
                 
                 if (!mailList.contains(option)){
                     options.add(option);
                 }
                 option = names[0].substring(0,1) + names[i] + 
-                        names[j].substring(0,1) + "@id.uff.br";
+                        names[j].substring(0,1) + domain;
                 
                 if (!mailList.contains(option)){
                     options.add(option);
                 }
                 option = names[0].substring(0,1) + names[i].substring(0,1) 
-                        + names[j] + "@id.uff.br";
+                        + names[j] + domain;
                 
                 if (!mailList.contains(option)){
                     options.add(option);

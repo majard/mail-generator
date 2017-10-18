@@ -9,8 +9,7 @@ import java.util.List;
 public interface DatabaseManager {
 
     /* Fills the List studentList with the students contained in the csv file
-       named fileName in the root directory */
-    
+       named fileName in the root directory */    
     public void fillStudentList(String fileName);
     
     /* Generate e-mail options based on a permutation of the student names while
